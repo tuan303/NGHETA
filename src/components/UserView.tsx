@@ -29,16 +29,14 @@ export default function UserView({ grades, onAdminClick }: UserViewProps) {
 
   return (
     <div className="min-h-screen relative flex flex-col items-center pt-8 overflow-hidden">
-      {/* Background Image with Proxy */}
-      <div 
-        className="absolute inset-0 z-0 bg-teal-800"
-        style={{ 
-          backgroundImage: 'url("https://wsrv.nl/?url=https%3A%2F%2Fnshm.vn%2Fts%2Ftruong.jpg")',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        }}
-      >
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0 bg-teal-800">
+        <img 
+          src="https://nshm.vn/ts/truong.jpg" 
+          alt="Background" 
+          className="w-full h-full object-cover"
+          referrerPolicy="no-referrer"
+        />
         {/* Overlay for readability */}
         <div className="absolute inset-0 bg-teal-900/40"></div>
         <div className="absolute inset-0 bg-black/10"></div>
@@ -53,17 +51,13 @@ export default function UserView({ grades, onAdminClick }: UserViewProps) {
         <Settings size={24} />
       </button>
 
-      {/* Logo - Top Left with Proxy */}
+      {/* Logo - Top Left */}
       <div className="absolute top-4 left-4 z-50">
         <img 
-          src="https://wsrv.nl/?url=https%3A%2F%2Fnshm.vn%2Fts%2Flogonshm.svg" 
+          src="https://nshm.vn/ts/logonshm.svg" 
           alt="Ngôi Sao Hoàng Mai Logo" 
           className="h-16 md:h-24 w-auto drop-shadow-lg"
           referrerPolicy="no-referrer"
-          onError={(e) => {
-            // Fallback if proxy fails
-            (e.target as HTMLImageElement).src = "https://nshm.vn/ts/logonshm.svg";
-          }}
         />
       </div>
 
