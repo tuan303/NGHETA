@@ -28,15 +28,21 @@ export default function UserView({ grades, onAdminClick }: UserViewProps) {
   }, []);
 
   return (
-    <div 
-      className="min-h-screen relative flex flex-col items-center pt-8 bg-cover bg-center bg-no-repeat"
-      style={{ 
-        backgroundImage: 'url("https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=2070&auto=format&fit=crop")',
-      }}
-    >
-      {/* Teal Overlay */}
-      <div className="absolute inset-0 bg-teal-600/60 mix-blend-multiply"></div>
-      <div className="absolute inset-0 bg-white/10"></div>
+    <div className="min-h-screen relative flex flex-col items-center pt-8 overflow-hidden">
+      {/* Background Image with Proxy */}
+      <div 
+        className="absolute inset-0 z-0 bg-teal-800"
+        style={{ 
+          backgroundImage: 'url("https://wsrv.nl/?url=https%3A%2F%2Fnshm.vn%2Fts%2Ftruong.jpg")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
+        {/* Overlay for readability */}
+        <div className="absolute inset-0 bg-teal-900/40"></div>
+        <div className="absolute inset-0 bg-black/10"></div>
+      </div>
 
       {/* Admin Button (Hidden in plain sight, top right) */}
       <button 
@@ -47,27 +53,21 @@ export default function UserView({ grades, onAdminClick }: UserViewProps) {
         <Settings size={24} />
       </button>
 
-      <div className="relative z-10 w-full max-w-5xl px-4 flex flex-col items-center">
-        {/* Header / Logo */}
-        <div className="w-full flex justify-start mb-6">
-          <div className="flex items-center bg-white/90 p-2 rounded-md shadow-sm">
-            <div className="w-10 h-10 bg-red-600 flex items-center justify-center rounded-sm mr-3">
-              {/* Fake Logo Icon */}
-              <div className="w-6 h-6 border-2 border-white flex items-center justify-center relative">
-                <div className="absolute w-full h-0.5 bg-white rotate-45"></div>
-                <div className="absolute w-full h-0.5 bg-white -rotate-45"></div>
-                <div className="absolute w-0.5 h-full bg-white"></div>
-                <div className="absolute w-full h-0.5 bg-white"></div>
-                <div className="w-3 h-3 border border-white rounded-full bg-red-600 z-10"></div>
-              </div>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-xs font-semibold text-gray-800 leading-tight">Trường Tiểu học, THCS & THPT</span>
-              <span className="text-sm font-bold text-gray-900 leading-tight">Ngôi Sao Hoàng Mai</span>
-            </div>
-          </div>
-        </div>
+      {/* Logo - Top Left with Proxy */}
+      <div className="absolute top-4 left-4 z-50">
+        <img 
+          src="https://wsrv.nl/?url=https%3A%2F%2Fnshm.vn%2Fts%2Flogonshm.svg" 
+          alt="Ngôi Sao Hoàng Mai Logo" 
+          className="h-16 md:h-24 w-auto drop-shadow-lg"
+          referrerPolicy="no-referrer"
+          onError={(e) => {
+            // Fallback if proxy fails
+            (e.target as HTMLImageElement).src = "https://nshm.vn/ts/logonshm.svg";
+          }}
+        />
+      </div>
 
+      <div className="relative z-10 w-full max-w-5xl px-4 flex flex-col items-center">
         {/* Main Title */}
         <div className="bg-red-600 text-white px-12 py-3 rounded-xl shadow-lg border-2 border-red-700 mb-4">
           <h1 className="text-3xl md:text-4xl font-bold uppercase tracking-wide">File Nghe Tiếng Anh</h1>
