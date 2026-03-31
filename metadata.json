@@ -1,0 +1,5 @@
+{
+  "name": "Hệ thống File Nghe Tiếng Anh",
+  "description": "Ứng dụng chọn và nghe file audio tiếng Anh theo từng khối lớp, kèm trang quản trị.",
+  "requestFramePermissions": []
+}
