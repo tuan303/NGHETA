@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Grade } from '../types';
+import { Grade, Category } from '../types';
 import { ArrowLeft, Save } from 'lucide-react';
 
 interface AdminViewProps {
@@ -60,75 +60,90 @@ export default function AdminView({ grades: initialGrades, onSave, onBack }: Adm
         </div>
 
         {/* Content */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          {/* Desktop Table View */}
-          <div className="hidden md:block overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-gray-100 border-b border-gray-200">
-                  <th className="p-4 font-semibold text-gray-700 w-24">Khối</th>
-                  <th className="p-4 font-semibold text-gray-700 w-1/3">Tiêu đề hiển thị (Màu đỏ)</th>
-                  <th className="p-4 font-semibold text-gray-700">Link File Audio (MP3/WAV)</th>
-                </tr>
-              </thead>
-              <tbody>
-                {grades.map((grade) => (
-                  <tr key={grade.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                    <td className="p-4 font-medium text-gray-900">{grade.name}</td>
-                    <td className="p-4">
-                      <input 
-                        type="text" 
-                        value={grade.title}
-                        onChange={(e) => handleChange(grade.id, 'title', e.target.value)}
-                        className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        placeholder="VD: 25.11.ĐG03.IE.Listening Audio"
-                      />
-                    </td>
-                    <td className="p-4">
-                      <input 
-                        type="text" 
-                        value={grade.audioUrl}
-                        onChange={(e) => handleChange(grade.id, 'audioUrl', e.target.value)}
-                        className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        placeholder="https://example.com/audio.mp3"
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+        <div className="space-y-8">
+          {(['PRIMARY', 'SECONDARY', 'HIGH'] as Category[]).map((cat) => {
+            const catGrades = grades.filter(g => g.category === cat);
+            const catLabel = cat === 'PRIMARY' ? 'TIỂU HỌC' : cat === 'SECONDARY' ? 'THCS' : 'THPT';
+            const catColor = cat === 'PRIMARY' ? 'text-blue-600' : cat === 'SECONDARY' ? 'text-green-600' : 'text-purple-600';
 
-          {/* Mobile Card View */}
-          <div className="md:hidden divide-y divide-gray-100">
-            {grades.map((grade) => (
-              <div key={grade.id} className="p-4 space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="font-bold text-blue-600 text-lg">{grade.name}</span>
+            return (
+              <div key={cat} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <div className={`bg-gray-50 px-4 py-3 border-b border-gray-200 flex items-center gap-2`}>
+                  <div className={`w-3 h-3 rounded-full ${cat === 'PRIMARY' ? 'bg-blue-600' : cat === 'SECONDARY' ? 'bg-green-600' : 'bg-purple-600'}`}></div>
+                  <h2 className={`font-bold uppercase tracking-wider ${catColor}`}>{catLabel}</h2>
                 </div>
-                <div className="space-y-1">
-                  <label className="text-xs font-semibold text-gray-500 uppercase">Tiêu đề hiển thị</label>
-                  <input 
-                    type="text" 
-                    value={grade.title}
-                    onChange={(e) => handleChange(grade.id, 'title', e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Tiêu đề bài nghe"
-                  />
+
+                {/* Desktop Table View */}
+                <div className="hidden md:block overflow-x-auto">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="bg-gray-50 border-b border-gray-200">
+                        <th className="p-4 font-semibold text-gray-700 w-24">Khối</th>
+                        <th className="p-4 font-semibold text-gray-700 w-1/3">Tiêu đề hiển thị (Màu đỏ)</th>
+                        <th className="p-4 font-semibold text-gray-700">Link File Audio (MP3/WAV)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {catGrades.map((grade) => (
+                        <tr key={grade.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                          <td className="p-4 font-medium text-gray-900">{grade.name}</td>
+                          <td className="p-4">
+                            <input 
+                              type="text" 
+                              value={grade.title}
+                              onChange={(e) => handleChange(grade.id, 'title', e.target.value)}
+                              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                              placeholder="VD: 25.11.ĐG03.IE.Listening Audio"
+                            />
+                          </td>
+                          <td className="p-4">
+                            <input 
+                              type="text" 
+                              value={grade.audioUrl}
+                              onChange={(e) => handleChange(grade.id, 'audioUrl', e.target.value)}
+                              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                              placeholder="https://example.com/audio.mp3"
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
-                <div className="space-y-1">
-                  <label className="text-xs font-semibold text-gray-500 uppercase">Link File Audio</label>
-                  <input 
-                    type="text" 
-                    value={grade.audioUrl}
-                    onChange={(e) => handleChange(grade.id, 'audioUrl', e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="https://..."
-                  />
+
+                {/* Mobile Card View */}
+                <div className="md:hidden divide-y divide-gray-100">
+                  {catGrades.map((grade) => (
+                    <div key={grade.id} className="p-4 space-y-4">
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-blue-600 text-lg">{grade.name}</span>
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-xs font-semibold text-gray-500 uppercase">Tiêu đề hiển thị</label>
+                        <input 
+                          type="text" 
+                          value={grade.title}
+                          onChange={(e) => handleChange(grade.id, 'title', e.target.value)}
+                          className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          placeholder="Tiêu đề bài nghe"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-xs font-semibold text-gray-500 uppercase">Link File Audio</label>
+                        <input 
+                          type="text" 
+                          value={grade.audioUrl}
+                          onChange={(e) => handleChange(grade.id, 'audioUrl', e.target.value)}
+                          className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          placeholder="https://..."
+                        />
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-            ))}
-          </div>
+            );
+          })}
         </div>
       </div>
     </div>

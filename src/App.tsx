@@ -6,15 +6,22 @@
 import { useState, useEffect, FormEvent } from 'react';
 import UserView from './components/UserView';
 import AdminView from './components/AdminView';
-import { Grade } from './types';
+import { Grade, Category } from './types';
 import { doc, onSnapshot, setDoc } from 'firebase/firestore';
 import { db } from './firebase';
+
+const getCategory = (id: number): Category => {
+  if (id <= 5) return 'PRIMARY';
+  if (id <= 9) return 'SECONDARY';
+  return 'HIGH';
+};
 
 const DEFAULT_GRADES: Grade[] = Array.from({ length: 12 }, (_, i) => ({
   id: i + 1,
   name: `KHỐI ${i + 1}`,
   title: `Tiêu đề bài nghe khối ${i + 1}`,
-  audioUrl: '', // Default empty
+  audioUrl: '',
+  category: getCategory(i + 1),
 }));
 
 export default function App() {
@@ -23,6 +30,7 @@ export default function App() {
   const [showPinModal, setShowPinModal] = useState(false);
   const [pinInput, setPinInput] = useState('');
   const [pinError, setPinError] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
 
   useEffect(() => {
     const docRef = doc(db, 'settings', 'grades');
@@ -30,16 +38,19 @@ export default function App() {
     const unsubscribe = onSnapshot(docRef, (docSnap) => {
       if (docSnap.exists()) {
         const data = docSnap.data().grades;
-        setGrades(data);
-        localStorage.setItem('english_audio_grades', JSON.stringify(data));
+        // Ensure categories are present in existing data
+        const updatedData = data.map((g: Grade) => ({
+          ...g,
+          category: g.category || getCategory(g.id)
+        }));
+        setGrades(updatedData);
+        localStorage.setItem('english_audio_grades', JSON.stringify(updatedData));
       } else {
-        // Initialize if not exists
         setDoc(docRef, { grades: DEFAULT_GRADES }).catch(console.error);
         setGrades(DEFAULT_GRADES);
       }
     }, (error) => {
       console.error("Error fetching grades from Firebase:", error);
-      // Fallback to local storage if Firebase fails
       const storedGrades = localStorage.getItem('english_audio_grades');
       if (storedGrades) {
         setGrades(JSON.parse(storedGrades));
@@ -52,7 +63,6 @@ export default function App() {
   }, []);
 
   const handleSaveGrades = async (newGrades: Grade[]) => {
-    // Optimistic update
     setGrades(newGrades);
     localStorage.setItem('english_audio_grades', JSON.stringify(newGrades));
     
@@ -65,7 +75,7 @@ export default function App() {
     }
   };
 
-  if (grades.length === 0) return null; // Loading state
+  if (grades.length === 0) return null;
 
   const handleAdminClick = () => {
     setShowPinModal(true);
@@ -88,7 +98,12 @@ export default function App() {
       {isAdmin ? (
         <AdminView grades={grades} onSave={handleSaveGrades} onBack={() => setIsAdmin(false)} />
       ) : (
-        <UserView grades={grades} onAdminClick={handleAdminClick} />
+        <UserView 
+          grades={grades} 
+          onAdminClick={handleAdminClick} 
+          selectedCategory={selectedCategory}
+          onSelectCategory={setSelectedCategory}
+        />
       )}
 
       {/* Custom PIN Modal */}
