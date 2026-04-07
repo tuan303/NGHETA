@@ -72,7 +72,7 @@ export default function UserView({ grades, onAdminClick, selectedCategory, onSel
       {/* Logo */}
       <div className="absolute top-2 left-2 md:top-4 md:left-4 z-50">
         <img 
-          src="https://hoangmaistarschool.edu.vn/storage/general/logo.svg" 
+          src="https://hoangmaistarschool.edu.vn/thongtin/logo.svg" 
           alt="Ngôi Sao Hoàng Mai Logo" 
           className="h-12 md:h-24 w-auto drop-shadow-lg"
           referrerPolicy="no-referrer"
