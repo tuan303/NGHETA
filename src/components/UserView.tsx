@@ -32,7 +32,7 @@ export default function UserView({ grades, onAdminClick }: UserViewProps) {
       {/* Background Image */}
       <div className="absolute inset-0 z-0 bg-teal-800">
         <img 
-          src="https://nshm.vn/ts/truong.jpg" 
+          src="https://hoangmaistarschool.edu.vn/thongtin/truong.jpg" 
           alt="Background" 
           className="w-full h-full object-cover"
           referrerPolicy="no-referrer"
@@ -54,7 +54,7 @@ export default function UserView({ grades, onAdminClick }: UserViewProps) {
       {/* Logo - Top Left */}
       <div className="absolute top-4 left-4 z-50">
         <img 
-          src="https://nshm.vn/ts/logonshm.svg" 
+          src="https://hoangmaistarschool.edu.vn/thongtin/logo.svg" 
           alt="Ngôi Sao Hoàng Mai Logo" 
           className="h-16 md:h-24 w-auto drop-shadow-lg"
           referrerPolicy="no-referrer"
