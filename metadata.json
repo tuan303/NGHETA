@@ -1,5 +1,5 @@
 {
-  "name": "Hệ thống File Nghe Tiếng Anh",
-  "description": "Ứng dụng chọn và nghe file audio tiếng Anh theo từng khối lớp, kèm trang quản trị.",
+  "name": "NSHM - HỆ THỐNG NGHE TIẾNG ANH ONLINE",
+  "description": "Hệ thống nghe tiếng Anh online dành cho học sinh Trường Ngôi Sao Hoàng Mai.",
   "requestFramePermissions": []
 }

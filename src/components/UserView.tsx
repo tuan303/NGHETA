@@ -63,8 +63,8 @@ export default function UserView({ grades, onAdminClick }: UserViewProps) {
 
       <div className="relative z-10 w-full max-w-5xl px-4 flex flex-col items-center">
         {/* Main Title */}
-        <div className="bg-red-600 text-white px-12 py-3 rounded-xl shadow-lg border-2 border-red-700 mb-4">
-          <h1 className="text-3xl md:text-4xl font-bold uppercase tracking-wide">File Nghe Tiếng Anh</h1>
+        <div className="bg-red-600 text-white px-12 py-3 rounded-xl shadow-lg border-2 border-red-700 mb-4 text-center">
+          <h1 className="text-2xl md:text-3xl font-bold uppercase tracking-wide">NSHM - HỆ THỐNG NGHE TIẾNG ANH ONLINE</h1>
         </div>
 
         {/* Subtitle */}
