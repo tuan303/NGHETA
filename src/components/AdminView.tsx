@@ -148,7 +148,7 @@ export default function AdminView({ grades: initialGrades, onSave, onBack }: Adm
       </div>
 
       {/* Footer Text */}
-      <div className="fixed bottom-2 right-4 z-50 text-gray-400 text-xs md:text-sm font-medium pointer-events-none">
+      <div className="fixed bottom-2 right-4 z-50 text-white text-xs md:text-sm font-medium pointer-events-none drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
         © Design by TuanTM
       </div>
     </div>
