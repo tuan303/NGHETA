@@ -192,6 +192,11 @@ export default function UserView({ grades, onAdminClick, selectedCategory, onSel
           </AnimatePresence>
         </div>
       </div>
+
+      {/* Footer Text */}
+      <div className="absolute bottom-2 right-4 z-50 text-white/60 text-xs md:text-sm font-medium pointer-events-none">
+        © Design by TuanTM
+      </div>
     </div>
   );
 }
