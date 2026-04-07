@@ -7,12 +7,14 @@ import { useState, useEffect } from 'react';
 import UserView from './components/UserView';
 import AdminView from './components/AdminView';
 import { Grade } from './types';
+import { doc, onSnapshot, setDoc } from 'firebase/firestore';
+import { db } from './firebase';
 
 const DEFAULT_GRADES: Grade[] = Array.from({ length: 12 }, (_, i) => ({
   id: i + 1,
   name: `KHỐI ${i + 1}`,
   title: `Tiêu đề bài nghe khối ${i + 1}`,
-  audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', // Placeholder audio
+  audioUrl: '', // Default empty
 }));
 
 export default function App() {
@@ -23,18 +25,44 @@ export default function App() {
   const [pinError, setPinError] = useState('');
 
   useEffect(() => {
-    const storedGrades = localStorage.getItem('english_audio_grades');
-    if (storedGrades) {
-      setGrades(JSON.parse(storedGrades));
-    } else {
-      setGrades(DEFAULT_GRADES);
-      localStorage.setItem('english_audio_grades', JSON.stringify(DEFAULT_GRADES));
-    }
+    const docRef = doc(db, 'settings', 'grades');
+    
+    const unsubscribe = onSnapshot(docRef, (docSnap) => {
+      if (docSnap.exists()) {
+        const data = docSnap.data().grades;
+        setGrades(data);
+        localStorage.setItem('english_audio_grades', JSON.stringify(data));
+      } else {
+        // Initialize if not exists
+        setDoc(docRef, { grades: DEFAULT_GRADES }).catch(console.error);
+        setGrades(DEFAULT_GRADES);
+      }
+    }, (error) => {
+      console.error("Error fetching grades from Firebase:", error);
+      // Fallback to local storage if Firebase fails
+      const storedGrades = localStorage.getItem('english_audio_grades');
+      if (storedGrades) {
+        setGrades(JSON.parse(storedGrades));
+      } else {
+        setGrades(DEFAULT_GRADES);
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
 
-  const handleSaveGrades = (newGrades: Grade[]) => {
+  const handleSaveGrades = async (newGrades: Grade[]) => {
+    // Optimistic update
     setGrades(newGrades);
     localStorage.setItem('english_audio_grades', JSON.stringify(newGrades));
+    
+    try {
+      const docRef = doc(db, 'settings', 'grades');
+      await setDoc(docRef, { grades: newGrades });
+    } catch (error) {
+      console.error("Error saving to Firebase:", error);
+      alert("Có lỗi xảy ra khi lưu dữ liệu lên máy chủ. Vui lòng kiểm tra quyền truy cập.");
+    }
   };
 
   if (grades.length === 0) return null; // Loading state
