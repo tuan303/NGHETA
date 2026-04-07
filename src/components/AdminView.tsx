@@ -39,29 +39,30 @@ export default function AdminView({ grades: initialGrades, onSave, onBack }: Adm
 
       <div className="max-w-5xl mx-auto">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8 bg-white p-4 rounded-xl shadow-sm border border-gray-200">
-          <div className="flex items-center gap-4">
+        <div className="flex flex-col sm:flex-row items-center justify-between mb-6 md:mb-8 bg-white p-4 rounded-xl shadow-sm border border-gray-200 gap-4">
+          <div className="flex items-center gap-3 md:gap-4 w-full sm:w-auto">
             <button 
               onClick={onBack}
               className="p-2 hover:bg-gray-100 rounded-full transition-colors"
             >
-              <ArrowLeft size={24} className="text-gray-600" />
+              <ArrowLeft size={20} className="text-gray-600 md:w-6 md:h-6" />
             </button>
-            <h1 className="text-2xl font-bold text-gray-800">Quản trị File Nghe</h1>
+            <h1 className="text-xl md:text-2xl font-bold text-gray-800">Quản trị File Nghe</h1>
           </div>
           <button 
             onClick={handleSave}
             disabled={isSaving}
-            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors disabled:opacity-70"
+            className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors disabled:opacity-70 w-full sm:w-auto"
           >
-            <Save size={20} />
+            <Save size={18} className="md:w-5 md:h-5" />
             {isSaving ? 'Đang lưu...' : 'Lưu thay đổi'}
           </button>
         </div>
 
         {/* Content */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="overflow-x-auto">
+          {/* Desktop Table View */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-gray-100 border-b border-gray-200">
@@ -96,6 +97,37 @@ export default function AdminView({ grades: initialGrades, onSave, onBack }: Adm
                 ))}
               </tbody>
             </table>
+          </div>
+
+          {/* Mobile Card View */}
+          <div className="md:hidden divide-y divide-gray-100">
+            {grades.map((grade) => (
+              <div key={grade.id} className="p-4 space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-blue-600 text-lg">{grade.name}</span>
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold text-gray-500 uppercase">Tiêu đề hiển thị</label>
+                  <input 
+                    type="text" 
+                    value={grade.title}
+                    onChange={(e) => handleChange(grade.id, 'title', e.target.value)}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Tiêu đề bài nghe"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold text-gray-500 uppercase">Link File Audio</label>
+                  <input 
+                    type="text" 
+                    value={grade.audioUrl}
+                    onChange={(e) => handleChange(grade.id, 'audioUrl', e.target.value)}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="https://..."
+                  />
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

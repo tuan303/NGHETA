@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
 import UserView from './components/UserView';
 import AdminView from './components/AdminView';
 import { Grade } from './types';
@@ -73,7 +73,7 @@ export default function App() {
     setPinError('');
   };
 
-  const handlePinSubmit = (e: React.FormEvent) => {
+  const handlePinSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (pinInput === '898989') {
       setIsAdmin(true);

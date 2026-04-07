@@ -45,45 +45,45 @@ export default function UserView({ grades, onAdminClick }: UserViewProps) {
       {/* Admin Button (Hidden in plain sight, top right) */}
       <button 
         onClick={onAdminClick}
-        className="absolute top-4 right-4 z-50 p-2 text-white/50 hover:text-white transition-colors"
+        className="absolute top-2 right-2 md:top-4 md:right-4 z-50 p-2 text-white/50 hover:text-white transition-colors"
         title="Quản trị"
       >
-        <Settings size={24} />
+        <Settings size={20} className="md:w-6 md:h-6" />
       </button>
 
       {/* Logo - Top Left */}
-      <div className="absolute top-4 left-4 z-50">
+      <div className="absolute top-2 left-2 md:top-4 md:left-4 z-50">
         <img 
           src="https://hoangmaistarschool.edu.vn/thongtin/logo.svg" 
           alt="Ngôi Sao Hoàng Mai Logo" 
-          className="h-16 md:h-24 w-auto drop-shadow-lg"
+          className="h-12 md:h-24 w-auto drop-shadow-lg"
           referrerPolicy="no-referrer"
         />
       </div>
 
-      <div className="relative z-10 w-full max-w-5xl px-4 flex flex-col items-center">
+      <div className="relative z-10 w-full max-w-5xl px-4 flex flex-col items-center pt-12 md:pt-0">
         {/* Main Title */}
-        <div className="bg-red-600 text-white px-12 py-3 rounded-xl shadow-lg border-2 border-red-700 mb-4 text-center">
-          <h1 className="text-2xl md:text-3xl font-bold uppercase tracking-wide">NSHM - HỆ THỐNG NGHE TIẾNG ANH ONLINE</h1>
+        <div className="bg-red-600 text-white px-6 md:px-12 py-3 rounded-xl shadow-lg border-2 border-red-700 mb-4 text-center">
+          <h1 className="text-xl md:text-3xl font-bold uppercase tracking-wide leading-tight">NSHM - HỆ THỐNG NGHE TIẾNG ANH ONLINE</h1>
         </div>
 
         {/* Subtitle */}
-        <h2 className="text-white text-lg md:text-xl font-medium mb-12 uppercase tracking-wider relative inline-block">
+        <h2 className="text-white text-base md:text-xl font-medium mb-8 md:mb-12 uppercase tracking-wider relative inline-block text-center px-2">
           Thầy/Cô vui lòng chọn file nghe theo đúng khối
           <span className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-3/4 h-0.5 bg-white/70"></span>
         </h2>
 
         {/* Main Card */}
-        <div className="bg-white/20 backdrop-blur-sm border-2 border-yellow-400 rounded-2xl p-6 md:p-10 w-full max-w-2xl flex flex-col items-center shadow-2xl">
+        <div className="bg-white/20 backdrop-blur-sm border-2 border-yellow-400 rounded-2xl p-4 md:p-10 w-full max-w-2xl flex flex-col items-center shadow-2xl">
           
           {/* Dropdown Button */}
-          <div className="relative w-full max-w-[224px] mb-8" ref={dropdownRef}>
+          <div className="relative w-full max-w-[280px] mb-6 md:mb-8" ref={dropdownRef}>
             <button 
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="w-full bg-[#008033] hover:bg-[#006629] text-white text-[29px] font-bold py-4 px-6 rounded-xl shadow-md flex items-center justify-center transition-colors border border-green-800"
+              className="w-full bg-[#008033] hover:bg-[#006629] text-white text-xl md:text-[29px] font-bold py-3 md:py-4 px-6 rounded-xl shadow-md flex items-center justify-center transition-colors border border-green-800"
             >
               {selectedGrade.name}
-              <ChevronDown className="absolute right-4" size={28} />
+              <ChevronDown className="absolute right-4" size={24} />
             </button>
 
             {/* Dropdown Menu */}
@@ -96,7 +96,7 @@ export default function UserView({ grades, onAdminClick }: UserViewProps) {
                       setSelectedGradeId(grade.id);
                       setIsDropdownOpen(false);
                     }}
-                    className={`w-full text-center py-3 px-4 text-[23px] font-semibold hover:bg-gray-100 transition-colors ${selectedGradeId === grade.id ? 'bg-green-50 text-green-700' : 'text-gray-800'}`}
+                    className={`w-full text-center py-3 px-4 text-lg md:text-[23px] font-semibold hover:bg-gray-100 transition-colors ${selectedGradeId === grade.id ? 'bg-green-50 text-green-700' : 'text-gray-800'}`}
                   >
                     {grade.name}
                   </button>
@@ -106,7 +106,7 @@ export default function UserView({ grades, onAdminClick }: UserViewProps) {
           </div>
 
           {/* Audio Title */}
-          <h3 className="text-red-600 text-xl md:text-2xl font-bold mb-6 text-center">
+          <h3 className="text-red-600 text-lg md:text-2xl font-bold mb-6 text-center px-2">
             {selectedGrade.title || "Chưa có tiêu đề"}
           </h3>
 
