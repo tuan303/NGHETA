@@ -22,6 +22,7 @@ const DEFAULT_GRADES: Grade[] = Array.from({ length: 12 }, (_, i) => ({
   title: `Tiêu đề bài nghe khối ${i + 1}`,
   audioUrl: '',
   category: getCategory(i + 1),
+  audios: [{ id: crypto.randomUUID(), title: `Tiêu đề bài nghe khối ${i + 1}`, url: '' }],
 }));
 
 export default function App() {
@@ -38,11 +39,18 @@ export default function App() {
     const unsubscribe = onSnapshot(docRef, (docSnap) => {
       if (docSnap.exists()) {
         const data = docSnap.data().grades;
-        // Ensure categories are present in existing data
-        const updatedData = data.map((g: Grade) => ({
-          ...g,
-          category: g.category || getCategory(g.id)
-        }));
+        // Ensure categories and audios are present in existing data
+        const updatedData = data.map((g: Grade) => {
+          let audios = g.audios;
+          if (!audios || audios.length === 0) {
+            audios = [{ id: crypto.randomUUID(), title: g.title || '', url: g.audioUrl || '' }];
+          }
+          return {
+            ...g,
+            category: g.category || getCategory(g.id),
+            audios
+          };
+        });
         setGrades(updatedData);
         localStorage.setItem('english_audio_grades', JSON.stringify(updatedData));
       } else {
@@ -53,7 +61,19 @@ export default function App() {
       console.error("Error fetching grades from Firebase:", error);
       const storedGrades = localStorage.getItem('english_audio_grades');
       if (storedGrades) {
-        setGrades(JSON.parse(storedGrades));
+        const parsed = JSON.parse(storedGrades);
+        const updatedData = parsed.map((g: Grade) => {
+          let audios = g.audios;
+          if (!audios || audios.length === 0) {
+            audios = [{ id: crypto.randomUUID(), title: g.title || '', url: g.audioUrl || '' }];
+          }
+          return {
+            ...g,
+            category: g.category || getCategory(g.id),
+            audios
+          };
+        });
+        setGrades(updatedData);
       } else {
         setGrades(DEFAULT_GRADES);
       }

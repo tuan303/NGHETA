@@ -165,25 +165,38 @@ export default function UserView({ grades, onAdminClick, selectedCategory, onSel
                     )}
                   </div>
 
-                  {/* Audio Title */}
-                  <h3 className="text-red-600 text-lg md:text-2xl font-bold mb-6 text-center px-2">
-                    {selectedGrade?.title || "Chưa có tiêu đề"}
-                  </h3>
+                  {/* Audio List */}
+                  <div className="w-full max-w-md space-y-6">
+                    {selectedGrade?.audios && selectedGrade.audios.length > 0 ? (
+                      selectedGrade.audios.map((audio, index) => (
+                        <div key={audio.id} className="flex flex-col items-center">
+                          {/* Audio Title */}
+                          <h3 className="text-red-600 text-lg md:text-xl font-bold mb-3 text-center px-2">
+                            {audio.title || `Bài nghe ${index + 1}`}
+                          </h3>
 
-                  {/* Audio Player Container */}
-                  <div className="bg-[#ff8c42] w-full max-w-md p-4 rounded-xl shadow-inner border border-orange-600 flex justify-center">
-                    {selectedGrade?.audioUrl ? (
-                      <audio 
-                        key={selectedGrade.audioUrl}
-                        controls 
-                        className="w-full h-12"
-                        controlsList="nodownload"
-                      >
-                        <source src={selectedGrade.audioUrl} type="audio/mpeg" />
-                        Trình duyệt của bạn không hỗ trợ thẻ audio.
-                      </audio>
+                          {/* Audio Player Container */}
+                          <div className="bg-[#ff8c42] w-full p-4 rounded-xl shadow-inner border border-orange-600 flex justify-center">
+                            {audio.url ? (
+                              <audio 
+                                key={audio.url}
+                                controls 
+                                className="w-full h-12"
+                                controlsList="nodownload"
+                              >
+                                <source src={audio.url} type="audio/mpeg" />
+                                Trình duyệt của bạn không hỗ trợ thẻ audio.
+                              </audio>
+                            ) : (
+                              <div className="text-white font-medium py-2">Chưa có link file nghe</div>
+                            )}
+                          </div>
+                        </div>
+                      ))
                     ) : (
-                      <div className="text-white font-medium py-2">Chưa có file nghe cho khối này</div>
+                      <div className="text-white font-medium py-4 text-center bg-black/20 rounded-xl">
+                        Chưa có file nghe nào cho khối này
+                      </div>
                     )}
                   </div>
                 </div>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Grade, Category } from '../types';
-import { ArrowLeft, Save } from 'lucide-react';
+import { Grade, Category, AudioItem } from '../types';
+import { ArrowLeft, Save, Plus, Minus } from 'lucide-react';
 
 interface AdminViewProps {
   grades: Grade[];
@@ -13,8 +13,40 @@ export default function AdminView({ grades: initialGrades, onSave, onBack }: Adm
   const [isSaving, setIsSaving] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
-  const handleChange = (id: number, field: keyof Grade, value: string) => {
-    setGrades(grades.map(g => g.id === id ? { ...g, [field]: value } : g));
+  const handleAudioChange = (gradeId: number, audioId: string, field: keyof AudioItem, value: string) => {
+    setGrades(grades.map(g => {
+      if (g.id === gradeId) {
+        return {
+          ...g,
+          audios: g.audios.map(a => a.id === audioId ? { ...a, [field]: value } : a)
+        };
+      }
+      return g;
+    }));
+  };
+
+  const handleAddAudio = (gradeId: number) => {
+    setGrades(grades.map(g => {
+      if (g.id === gradeId) {
+        return {
+          ...g,
+          audios: [...g.audios, { id: crypto.randomUUID(), title: '', url: '' }]
+        };
+      }
+      return g;
+    }));
+  };
+
+  const handleRemoveAudio = (gradeId: number, audioId: string) => {
+    setGrades(grades.map(g => {
+      if (g.id === gradeId) {
+        return {
+          ...g,
+          audios: g.audios.filter(a => a.id !== audioId)
+        };
+      }
+      return g;
+    }));
   };
 
   const handleSave = () => {
@@ -79,31 +111,49 @@ export default function AdminView({ grades: initialGrades, onSave, onBack }: Adm
                     <thead>
                       <tr className="bg-gray-50 border-b border-gray-200">
                         <th className="p-4 font-semibold text-gray-700 w-24">Khối</th>
-                        <th className="p-4 font-semibold text-gray-700 w-1/3">Tiêu đề hiển thị (Màu đỏ)</th>
-                        <th className="p-4 font-semibold text-gray-700">Link File Audio (MP3/WAV)</th>
+                        <th className="p-4 font-semibold text-gray-700">Danh sách File Nghe</th>
                       </tr>
                     </thead>
                     <tbody>
                       {catGrades.map((grade) => (
                         <tr key={grade.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                          <td className="p-4 font-medium text-gray-900">{grade.name}</td>
+                          <td className="p-4 font-medium text-gray-900 align-top">{grade.name}</td>
                           <td className="p-4">
-                            <input 
-                              type="text" 
-                              value={grade.title}
-                              onChange={(e) => handleChange(grade.id, 'title', e.target.value)}
-                              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                              placeholder="VD: 25.11.ĐG03.IE.Listening Audio"
-                            />
-                          </td>
-                          <td className="p-4">
-                            <input 
-                              type="text" 
-                              value={grade.audioUrl}
-                              onChange={(e) => handleChange(grade.id, 'audioUrl', e.target.value)}
-                              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                              placeholder="https://example.com/audio.mp3"
-                            />
+                            <div className="space-y-3">
+                              {grade.audios.map((audio) => (
+                                <div key={audio.id} className="flex items-start gap-3">
+                                  <div className="flex-1 grid grid-cols-2 gap-3">
+                                    <input 
+                                      type="text" 
+                                      value={audio.title}
+                                      onChange={(e) => handleAudioChange(grade.id, audio.id, 'title', e.target.value)}
+                                      className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                      placeholder="Tiêu đề hiển thị (Màu đỏ)"
+                                    />
+                                    <input 
+                                      type="text" 
+                                      value={audio.url}
+                                      onChange={(e) => handleAudioChange(grade.id, audio.id, 'url', e.target.value)}
+                                      className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                      placeholder="Link File Audio (MP3/WAV)"
+                                    />
+                                  </div>
+                                  <button 
+                                    onClick={() => handleRemoveAudio(grade.id, audio.id)} 
+                                    className="p-2 mt-0.5 text-red-500 hover:bg-red-50 rounded-md transition-colors"
+                                    title="Xóa file này"
+                                  >
+                                    <Minus size={20} />
+                                  </button>
+                                </div>
+                              ))}
+                              <button 
+                                onClick={() => handleAddAudio(grade.id)} 
+                                className="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 font-medium px-2 py-1 rounded hover:bg-blue-50 transition-colors"
+                              >
+                                <Plus size={18} /> Thêm file nghe
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       ))}
@@ -118,25 +168,45 @@ export default function AdminView({ grades: initialGrades, onSave, onBack }: Adm
                       <div className="flex items-center justify-between">
                         <span className="font-bold text-blue-600 text-lg">{grade.name}</span>
                       </div>
-                      <div className="space-y-1">
-                        <label className="text-xs font-semibold text-gray-500 uppercase">Tiêu đề hiển thị</label>
-                        <input 
-                          type="text" 
-                          value={grade.title}
-                          onChange={(e) => handleChange(grade.id, 'title', e.target.value)}
-                          className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          placeholder="Tiêu đề bài nghe"
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <label className="text-xs font-semibold text-gray-500 uppercase">Link File Audio</label>
-                        <input 
-                          type="text" 
-                          value={grade.audioUrl}
-                          onChange={(e) => handleChange(grade.id, 'audioUrl', e.target.value)}
-                          className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          placeholder="https://..."
-                        />
+                      <div className="space-y-4">
+                        {grade.audios.map((audio, index) => (
+                          <div key={audio.id} className="p-3 bg-gray-50 rounded-lg border border-gray-200 space-y-3 relative">
+                            <div className="absolute top-2 right-2">
+                              <button 
+                                onClick={() => handleRemoveAudio(grade.id, audio.id)} 
+                                className="p-1.5 text-red-500 hover:bg-red-100 rounded-md transition-colors"
+                              >
+                                <Minus size={18} />
+                              </button>
+                            </div>
+                            <div className="space-y-1 pr-8">
+                              <label className="text-xs font-semibold text-gray-500 uppercase">Tiêu đề {index + 1}</label>
+                              <input 
+                                type="text" 
+                                value={audio.title}
+                                onChange={(e) => handleAudioChange(grade.id, audio.id, 'title', e.target.value)}
+                                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="Tiêu đề bài nghe"
+                              />
+                            </div>
+                            <div className="space-y-1">
+                              <label className="text-xs font-semibold text-gray-500 uppercase">Link Audio {index + 1}</label>
+                              <input 
+                                type="text" 
+                                value={audio.url}
+                                onChange={(e) => handleAudioChange(grade.id, audio.id, 'url', e.target.value)}
+                                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="https://..."
+                              />
+                            </div>
+                          </div>
+                        ))}
+                        <button 
+                          onClick={() => handleAddAudio(grade.id)} 
+                          className="w-full flex items-center justify-center gap-2 py-2.5 border-2 border-dashed border-blue-300 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors font-medium"
+                        >
+                          <Plus size={18} /> Thêm file nghe
+                        </button>
                       </div>
                     </div>
                   ))}
