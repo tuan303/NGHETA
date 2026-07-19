@@ -4,7 +4,7 @@ import { ArrowLeft, Save, Plus, Minus } from 'lucide-react';
 
 interface AdminViewProps {
   grades: Grade[];
-  onSave: (grades: Grade[]) => void;
+  onSave: (grades: Grade[]) => Promise<void>;
   onBack: () => void;
 }
 
@@ -49,14 +49,17 @@ export default function AdminView({ grades: initialGrades, onSave, onBack }: Adm
     }));
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setIsSaving(true);
-    onSave(grades);
-    setTimeout(() => {
-      setIsSaving(false);
+    try {
+      await onSave(grades);
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 3000);
-    }, 500);
+    } catch (error) {
+      console.error("Save failed", error);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (

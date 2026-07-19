@@ -89,9 +89,10 @@ export default function App() {
     try {
       const docRef = doc(db, 'settings', 'grades');
       await setDoc(docRef, { grades: newGrades });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error saving to Firebase:", error);
-      alert("Có lỗi xảy ra khi lưu dữ liệu lên máy chủ. Vui lòng kiểm tra quyền truy cập.");
+      alert(`Có lỗi xảy ra khi lưu dữ liệu lên máy chủ.\nChi tiết lỗi: ${error.message}\n\nVui lòng kiểm tra lại Rules (Quy tắc) trong Firebase Console để đảm bảo cho phép quyền write.`);
+      throw error;
     }
   };
 
