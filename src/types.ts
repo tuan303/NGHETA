@@ -14,3 +14,11 @@ export interface Grade {
   category: Category;
   audios: AudioItem[];
 }
+
+export interface BackupEntry {
+  id: string;
+  timestamp: number;
+  totalLinks: number;
+  summary: string;
+  grades: Grade[];
+}

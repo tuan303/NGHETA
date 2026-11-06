@@ -177,14 +177,15 @@ export default function UserView({ grades, onAdminClick, selectedCategory, onSel
 
                           {/* Audio Player Container */}
                           <div className="bg-[#ff8c42] w-full p-4 rounded-xl shadow-inner border border-orange-600 flex justify-center">
-                            {audio.url ? (
+                            {audio.url && audio.url.trim() ? (
                               <audio 
-                                key={audio.url}
+                                key={audio.url.trim()}
+                                src={audio.url.trim()}
                                 controls 
+                                preload="metadata"
                                 className="w-full h-12"
                                 controlsList="nodownload"
                               >
-                                <source src={audio.url} type="audio/mpeg" />
                                 Trình duyệt của bạn không hỗ trợ thẻ audio.
                               </audio>
                             ) : (
