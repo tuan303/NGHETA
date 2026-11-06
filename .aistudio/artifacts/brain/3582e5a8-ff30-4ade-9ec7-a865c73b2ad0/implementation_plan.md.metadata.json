@@ -1,6 +1,6 @@
 {
-  "summary": "Kế hoạch khắc phục triệt để lỗi tự mất link file nghe và nâng cấp cơ chế bảo vệ dữ liệu cho hệ thống Nghe Tiếng Anh Online NSHM.",
-  "updatedAt": "2026-11-06T01:06:33.030486317Z",
+  "summary": "Kế hoạch nâng cấp hiển thị tiêu đề bài nghe nổi bật với chữ đỏ đậm cỡ lớn (24px–28px) trên nền khung trắng bo góc sắc nét.",
+  "updatedAt": "2026-11-06T01:50:57.544022240Z",
   "requestFeedback": true,
   "userFacing": true
 }

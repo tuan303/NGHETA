@@ -169,11 +169,13 @@ export default function UserView({ grades, onAdminClick, selectedCategory, onSel
                   <div className="w-full max-w-md space-y-6">
                     {selectedGrade?.audios && selectedGrade.audios.length > 0 ? (
                       selectedGrade.audios.map((audio, index) => (
-                        <div key={audio.id} className="flex flex-col items-center">
+                        <div key={audio.id} className="flex flex-col items-center w-full">
                           {/* Audio Title */}
-                          <h3 className="text-red-600 text-lg md:text-xl font-bold mb-3 text-center px-2">
-                            {audio.title || `Bài nghe ${index + 1}`}
-                          </h3>
+                          <div className="bg-white/95 border-2 border-red-100 shadow-md rounded-xl px-5 py-2.5 mb-3.5 w-full text-center">
+                            <h3 className="text-red-600 text-2xl md:text-[28px] font-extrabold tracking-wide leading-snug break-words">
+                              {audio.title || `Bài nghe ${index + 1}`}
+                            </h3>
+                          </div>
 
                           {/* Audio Player Container */}
                           <div className="bg-[#ff8c42] w-full p-4 rounded-xl shadow-inner border border-orange-600 flex justify-center">
